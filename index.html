@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clozd MCP | Preview</title>
+    <style>
+      :root {
+        --patina: #09d4c8;
+        --blue: #14a6f8;
+        --royal: #274fdb;
+        --charcoal: #1f2528;
+        --body: #3d464d;
+        --muted: #6b757c;
+        --white: #ffffff;
+        --border: rgba(39, 79, 219, 0.14);
+        --glass: rgba(255, 255, 255, 0.66);
+        --glass-strong: rgba(255, 255, 255, 0.82);
+        --panel: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 251, 255, 0.88));
+        --shadow: 0 18px 48px rgba(20, 166, 248, 0.09);
+        --glow: 0 18px 44px rgba(20, 166, 248, 0.18);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--body);
+        background:
+          radial-gradient(circle at 0% 0%, rgba(9, 212, 200, 0.14), transparent 26%),
+          radial-gradient(circle at 100% 0%, rgba(39, 79, 219, 0.16), transparent 26%),
+          radial-gradient(circle at 80% 50%, rgba(20, 166, 248, 0.08), transparent 22%),
+          linear-gradient(180deg, #eef8fc 0%, #f8fbfe 36%, #ffffff 100%);
+        min-height: 100vh;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+        background-size: 36px 36px;
+        mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.45), transparent 75%);
+        opacity: 0.36;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .shell {
+        position: relative;
+      }
+
+      .nav {
+        position: sticky;
+        top: 14px;
+        z-index: 40;
+        width: min(calc(100% - 32px), 1480px);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 16px 20px;
+        border-radius: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.46);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(244, 250, 255, 0.68)),
+          linear-gradient(90deg, rgba(9, 212, 200, 0.08), rgba(20, 166, 248, 0.08));
+        backdrop-filter: blur(26px) saturate(1.1);
+        box-shadow:
+          0 22px 48px rgba(20, 166, 248, 0.12),
+          inset 0 1px 0 rgba(255, 255, 255, 0.65);
+      }
+
+      .nav::before {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        border-radius: 25px;
+        pointer-events: none;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.28), transparent 22%, transparent 78%, rgba(255, 255, 255, 0.18));
+        opacity: 0.7;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        object-fit: contain;
+        flex: 0 0 auto;
+      }
+
+      .brand-lockup {
+        height: 24px;
+        width: auto;
+        display: block;
+      }
+
+      .brand-sub {
+        margin-top: 4px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .nav-links {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .nav-link,
+      .ghost-link {
+        padding: 10px 15px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.52);
+        color: #2750b6;
+        font-size: 14px;
+        font-weight: 700;
+        transition: 180ms ease;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+      }
+
+      .nav-link:hover,
+      .ghost-link:hover {
+        transform: translateY(-1px) scale(1.01);
+        border-color: rgba(20, 166, 248, 0.28);
+        color: #1484cd;
+        background: rgba(255, 255, 255, 0.72);
+        box-shadow: 0 10px 22px rgba(20, 166, 248, 0.1);
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 20px;
+        border-radius: 16px;
+        border: 1px solid rgba(39, 79, 219, 0.12);
+        background: rgba(255, 255, 255, 0.8);
+        color: var(--royal);
+        font-size: 15px;
+        font-weight: 700;
+        transition: 180ms ease;
+        box-shadow: 0 12px 24px rgba(39, 79, 219, 0.08);
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+      }
+
+      .button.primary {
+        border: 0;
+        background: linear-gradient(90deg, #1c77ff, #235af1);
+        color: var(--white);
+        box-shadow: var(--glow);
+      }
+
+      .button.dark {
+        border: 0;
+        background: #0f1115;
+        color: var(--white);
+      }
+
+      .page {
+        max-width: 1540px;
+        margin: 0 auto;
+        padding: 34px 20px 70px;
+        display: grid;
+        gap: 40px;
+      }
+
+      .surface {
+        border-radius: 34px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .glass {
+        background: var(--glass);
+        backdrop-filter: blur(18px);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 80% 16%, rgba(255, 255, 255, 0.18), transparent 15%),
+          radial-gradient(circle at 88% 46%, rgba(39, 79, 219, 0.18), transparent 18%),
+          linear-gradient(135deg, rgba(9, 212, 200, 0.78), rgba(20, 166, 248, 0.92));
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        right: -140px;
+        bottom: -180px;
+        width: 480px;
+        height: 480px;
+        background: linear-gradient(180deg, rgba(39, 79, 219, 0.38), rgba(39, 79, 219, 0));
+        clip-path: polygon(26% 0%, 100% 0%, 100% 100%, 0% 100%);
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1px);
+        background-size: 18px 18px;
+        mask-image: radial-gradient(circle at 74% 42%, rgba(0, 0, 0, 0.85), transparent 55%);
+        opacity: 0.72;
+      }
+
+      .hero-brand-mark {
+        position: absolute;
+        right: -120px;
+        top: 54px;
+        width: min(34vw, 440px);
+        opacity: 0.1;
+        filter: saturate(1.08);
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        gap: 34px;
+        padding: 34px;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 760px;
+        color: #0f1725;
+        font-size: clamp(3.15rem, 7vw, 5.2rem);
+        line-height: 0.98;
+        letter-spacing: -0.028em;
+      }
+
+      .hero-copy {
+        margin-top: 24px;
+        max-width: 670px;
+        font-size: 20px;
+        line-height: 1.72;
+        color: rgba(15, 23, 37, 0.74);
+      }
+
+      .pill-row,
+      .button-row,
+      .tab-row,
+      .mini-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .mini-pill,
+      .mini-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 13px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .mini-tag {
+        background: rgba(39, 79, 219, 0.08);
+        color: var(--royal);
+      }
+
+      .mini-pill {
+        background: rgba(255, 255, 255, 0.24);
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        color: rgba(15, 23, 37, 0.78);
+      }
+
+      .hero-side {
+        display: grid;
+        gap: 16px;
+      }
+
+      .hero-note-grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .hero-diagram {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        align-items: center;
+        padding: 14px;
+        border-radius: 32px;
+        background: rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(18px);
+      }
+
+      .diagram-col,
+      .diagram-core,
+      .hero-note,
+      .section-note,
+      .bento-card,
+      .feature-card,
+      .resource-card,
+      .prompt-card,
+      .workflow-card,
+      .wide-panel {
+        border-radius: 28px;
+        border: 1px solid var(--border);
+        background: var(--glass-strong);
+        backdrop-filter: blur(16px);
+        box-shadow: var(--shadow);
+      }
+
+      .diagram-col,
+      .diagram-core {
+        padding: 18px 14px;
+      }
+
+      .diagram-title {
+        margin-bottom: 12px;
+        text-align: center;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: rgba(15, 23, 37, 0.68);
+      }
+
+      .diagram-stack {
+        display: grid;
+        gap: 10px;
+        align-content: start;
+      }
+
+      .diagram-item {
+        padding: 12px 14px;
+        text-align: center;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(39, 79, 219, 0.1);
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+      }
+
+      .diagram-core {
+        position: relative;
+        text-align: center;
+        padding: 28px 18px 22px;
+      }
+
+      .diagram-logo {
+        width: 62px;
+        height: 62px;
+        margin: 0 auto 14px;
+        display: block;
+        object-fit: contain;
+      }
+
+      .diagram-core h2 {
+        margin: 0;
+        color: var(--charcoal);
+        font-size: 18px;
+        line-height: 1.2;
+      }
+
+      .diagram-core p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .chip-row {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .chip {
+        padding: 8px 12px;
+        border-radius: 14px;
+        background: rgba(9, 212, 200, 0.12);
+        color: #0c7570;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .hero-note {
+        padding: 18px 20px;
+      }
+
+      .hero-note strong {
+        display: block;
+        color: var(--charcoal);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .hero-note p {
+        margin: 10px 0 0;
+        color: #50606b;
+        line-height: 1.75;
+      }
+
+      .section {
+        scroll-margin-top: 94px;
+      }
+
+      .section-head {
+        display: grid;
+        gap: 18px;
+        margin-bottom: 22px;
+      }
+
+      .section-kicker {
+        display: block;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #09b8b0;
+      }
+
+      .section-title {
+        margin: 12px 0 0;
+        max-width: 860px;
+        color: var(--charcoal);
+        font-size: clamp(2.1rem, 4vw, 3.15rem);
+        line-height: 1.04;
+        letter-spacing: -0.036em;
+      }
+
+      .section-copy {
+        margin: 14px 0 0;
+        max-width: 820px;
+        font-size: 18px;
+        line-height: 1.78;
+        color: #5b6770;
+      }
+
+      .feature-grid,
+      .resource-grid,
+      .prompt-grid,
+      .workflow-grid,
+      .intro-grid,
+      .intro-panels {
+        display: grid;
+        gap: 18px;
+      }
+
+      .feature-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .icon-box {
+        width: 60px;
+        height: 60px;
+        border-radius: 20px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, rgba(9, 212, 200, 0.16), rgba(20, 166, 248, 0.16));
+        overflow: hidden;
+      }
+
+      .icon-box img {
+        width: 34px;
+        height: 34px;
+        object-fit: contain;
+        display: block;
+      }
+
+      .step-number {
+        color: #1c90d8;
+        font-size: 24px;
+        font-weight: 800;
+      }
+
+      .feature-card,
+      .resource-card,
+      .prompt-card,
+      .workflow-card,
+      .bento-card {
+        padding: 24px;
+      }
+
+      .feature-card h3,
+      .resource-card h3,
+      .prompt-card h3,
+      .workflow-card h3,
+      .bento-card h3,
+      .wide-panel h3 {
+        margin: 16px 0 0;
+        color: var(--charcoal);
+        font-size: 23px;
+        line-height: 1.12;
+        letter-spacing: -0.028em;
+      }
+
+      .feature-card p,
+      .resource-card p,
+      .prompt-card p,
+      .workflow-card p,
+      .bento-card p,
+      .wide-panel p {
+        margin: 12px 0 0;
+        color: #56626c;
+        font-size: 15px;
+        line-height: 1.8;
+      }
+
+      .intro-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        align-items: start;
+      }
+
+      .intro-panels {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        align-items: start;
+        grid-auto-rows: 1fr;
+      }
+
+      .intro-panels .wide-panel {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-top: 0;
+      }
+
+      .intro-panels > .wide-panel + .wide-panel {
+        margin-top: 0;
+      }
+
+      .intro-panels > :last-child {
+        align-self: stretch;
+      }
+
+      .wide-panel {
+        padding: 30px;
+      }
+
+      .wide-panel + .wide-panel {
+        margin-top: 18px;
+      }
+
+      .compact-panel {
+        padding: 24px 26px;
+      }
+
+      .section-note {
+        padding: 24px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(20, 166, 248, 0.06));
+      }
+
+      .section-note code {
+        display: block;
+        margin-top: 16px;
+        padding: 16px 18px;
+        border-radius: 18px;
+        background: #0f1725;
+        color: #b9ecff;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 14px;
+        line-height: 1.65;
+        overflow-x: auto;
+      }
+
+      .tab {
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(39, 79, 219, 0.12);
+        background: rgba(255, 255, 255, 0.8);
+        color: var(--royal);
+        font-weight: 700;
+        cursor: pointer;
+        transition: 180ms ease;
+      }
+
+      .tab.active,
+      .tab:hover {
+        background: rgba(20, 166, 248, 0.12);
+        border-color: rgba(20, 166, 248, 0.2);
+        color: #1484cd;
+      }
+
+      .prompt-grid {
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      }
+
+      .prompt-card {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .prompt-card .button-row {
+        margin-top: auto;
+        padding-top: 24px;
+      }
+
+      .copy-button {
+        position: relative;
+        min-width: 144px;
+      }
+
+      .copy-button[data-copy-state="copied"] {
+        background: linear-gradient(90deg, #1c77ff, #235af1);
+        color: var(--white);
+        border-color: transparent;
+        box-shadow: var(--glow);
+      }
+
+      .copy-button::before {
+        content: "⧉";
+        font-size: 15px;
+        line-height: 1;
+      }
+
+      .copy-button[data-copy-state="copied"]::before {
+        content: "✓";
+      }
+
+      .prompt-tag {
+        display: inline-flex;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(9, 212, 200, 0.12);
+        color: #0c7a73;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .workflow-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+
+      .flow-shell {
+        padding: 28px;
+      }
+
+      .flow-steps {
+        display: grid;
+        gap: 12px;
+      }
+
+      .flow-step {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 44px minmax(0, 1fr);
+        gap: 14px;
+        align-items: center;
+        padding: 14px 16px;
+        text-align: left;
+        border-radius: 20px;
+        border: 1px solid rgba(39, 79, 219, 0.12);
+        background: rgba(255, 255, 255, 0.82);
+        color: var(--charcoal);
+        cursor: pointer;
+        transition: 180ms ease;
+      }
+
+      .flow-step:hover,
+      .flow-step.active {
+        border-color: rgba(20, 166, 248, 0.26);
+        background: rgba(20, 166, 248, 0.1);
+        box-shadow: 0 12px 24px rgba(20, 166, 248, 0.08);
+      }
+
+      .flow-step-num {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, rgba(9, 212, 200, 0.16), rgba(20, 166, 248, 0.22));
+        color: #1769e9;
+        font-weight: 800;
+      }
+
+      .flow-step-copy strong,
+      .flow-panel-head strong {
+        display: block;
+        color: var(--charcoal);
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+      }
+
+      .flow-step-copy span,
+      .flow-panel-head span {
+        display: block;
+        margin-top: 4px;
+        color: #58656f;
+        line-height: 1.6;
+      }
+
+      .flow-visual {
+        padding: 28px;
+        min-height: 100%;
+      }
+
+      .flow-panel {
+        display: none;
+        gap: 20px;
+      }
+
+      .flow-panel.active {
+        display: grid;
+      }
+
+      .flow-stage {
+        display: grid;
+        gap: 14px;
+      }
+
+      .flow-node {
+        padding: 16px 18px;
+        border-radius: 22px;
+        border: 1px solid rgba(39, 79, 219, 0.12);
+        background: rgba(255, 255, 255, 0.88);
+      }
+
+      .flow-node-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #0ca9a4;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .flow-node strong {
+        display: block;
+        color: var(--charcoal);
+        font-size: 20px;
+        line-height: 1.2;
+      }
+
+      .flow-node p {
+        margin: 8px 0 0;
+        color: #58656f;
+        line-height: 1.72;
+      }
+
+      .flow-arrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #2b63e3;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .flow-arrow::before {
+        content: "";
+        flex: 1;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(9, 212, 200, 0.9), rgba(39, 79, 219, 0.9));
+      }
+
+      .flow-arrow::after {
+        content: "→";
+        font-size: 22px;
+        line-height: 1;
+      }
+
+      .flow-detail-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .flow-detail {
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: rgba(20, 166, 248, 0.06);
+        border: 1px solid rgba(39, 79, 219, 0.1);
+      }
+
+      .flow-detail strong {
+        display: block;
+        color: var(--charcoal);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .flow-detail span {
+        display: block;
+        margin-top: 8px;
+        color: #55616b;
+        line-height: 1.7;
+      }
+
+      .workflow-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .workflow-item {
+        padding: 14px 16px;
+        border-radius: 18px;
+        border: 1px solid rgba(39, 79, 219, 0.1);
+        background: rgba(255, 255, 255, 0.86);
+      }
+
+      .workflow-item strong {
+        display: block;
+        color: var(--charcoal);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .workflow-item span {
+        display: block;
+        margin-top: 8px;
+        color: #55616b;
+        line-height: 1.68;
+      }
+
+      .resource-grid {
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      }
+
+      [data-prompt-group] {
+        display: none;
+      }
+
+      [data-prompt-group].active {
+        display: grid;
+      }
+
+      .desktop-only {
+        display: none;
+      }
+
+      @media (min-width: 960px) {
+        .nav {
+          padding: 16px 26px;
+        }
+
+        .nav-links,
+        .desktop-only {
+          display: flex;
+        }
+
+        .hero-inner {
+          grid-template-columns: minmax(0, 1.08fr) minmax(620px, 0.92fr);
+          padding: 44px;
+          gap: 36px;
+          align-items: start;
+        }
+
+        .hero-diagram {
+          grid-template-columns: minmax(170px, 0.9fr) minmax(260px, 1.04fr) minmax(170px, 0.9fr);
+        }
+
+        .hero-note-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .section-head {
+          grid-template-columns: minmax(0, 1fr) auto;
+          align-items: end;
+        }
+
+        .workflow-grid.flow-layout {
+          grid-template-columns: minmax(320px, 0.88fr) minmax(0, 1.12fr);
+          align-items: stretch;
+        }
+
+        .intro-panels {
+          display: flex;
+          align-items: stretch;
+          gap: 18px;
+        }
+
+        .intro-panels > .wide-panel {
+          flex: 1 1 0;
+          min-width: 0;
+        }
+
+      }
+
+      @media (min-width: 1200px) {
+        .prompt-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="nav">
+        <div class="brand">
+          <div>
+            <img class="brand-lockup" src="./clozd-logo-main.svg" alt="Clozd" />
+            <div class="brand-sub">MCP Preview</div>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a class="nav-link" href="#intro">Intro to Clozd MCP</a>
+          <a class="nav-link" href="#how-it-works">How it works</a>
+          <a class="nav-link" href="#prompt-library">Prompt Library</a>
+          <a class="nav-link" href="#resources">Resources</a>
+        </nav>
+      </header>
+
+      <main class="page">
+        <section class="hero surface">
+          <img class="hero-brand-mark" src="./clozd-logo-mark.svg" alt="" aria-hidden="true" />
+          <div class="hero-inner">
+            <div>
+              <h1>Bring customer insights directly into your AI workflows.</h1>
+              <p class="hero-copy">
+                Connect Clozd to the AI tools your team already uses so you can explore win/loss themes, surface
+                decision drivers, and bring real customer evidence into strategy, selling, and messaging work.
+              </p>
+              <div class="pill-row" style="margin-top: 24px;">
+                <span class="mini-pill">Secure OAuth connection</span>
+                <span class="mini-pill">Real-time Clozd insights</span>
+                <span class="mini-pill">Works with MCP-capable agents</span>
+              </div>
+              <div class="button-row" style="margin-top: 28px;">
+                <a class="button primary" href="#how-it-works">Get started</a>
+                <a class="button" href="#prompt-library">Explore prompts</a>
+              </div>
+            </div>
+
+            <div class="hero-side">
+              <div class="hero-diagram">
+                <div class="diagram-col">
+                  <div class="diagram-title">AI Agents & Clients</div>
+                  <div class="diagram-stack">
+                    <div class="diagram-item">Claude</div>
+                    <div class="diagram-item">Cursor</div>
+                    <div class="diagram-item">Windsurf</div>
+                    <div class="diagram-item">Your AI agent of choice</div>
+                    <div class="diagram-item">Any client with MCP support</div>
+                  </div>
+                </div>
+
+                <div class="diagram-core">
+                  <img class="diagram-logo" src="./clozd-logo-mark.svg" alt="Clozd logo mark" />
+                  <h2>Clozd MCP Server</h2>
+                  <p>Secure • Scalable • Grounded in your actual customer insights</p>
+                  <div class="chip-row">
+                    <span class="chip">Tools</span>
+                    <span class="chip">Prompts</span>
+                    <span class="chip">Resources</span>
+                  </div>
+                </div>
+
+                <div class="diagram-col">
+                  <div class="diagram-title">Clozd Platform</div>
+                  <div class="diagram-stack">
+                    <div class="diagram-item">Conversations</div>
+                    <div class="diagram-item">Implementation</div>
+                    <div class="diagram-item">Surveys</div>
+                    <div class="diagram-item">Signals</div>
+                    <div class="diagram-item">Integrations</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hero-note-grid">
+                <div class="hero-note">
+                  <strong>Why it matters</strong>
+                  <p>Instead of asking AI to guess, you can bring customer interview data and competitive context into the answer.</p>
+                </div>
+                <div class="hero-note">
+                  <strong>What changes</strong>
+                  <p>Your team can use natural language to work with real customer intelligence inside the flow of everyday work.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="surface" style="padding: 26px 24px 28px;">
+          <div class="section-head" style="margin-bottom: 20px;">
+            <div>
+              <span class="section-kicker">Why teams choose Clozd MCP</span>
+              <h2 class="section-title">A faster way to bring customer truth into AI-powered work.</h2>
+            </div>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card">
+              <div class="icon-box"><img src="./icon-check.png" alt="" aria-hidden="true" /></div>
+              <h3>Secure by design</h3>
+              <p>Sign in through your identity provider with OAuth instead of passing around API keys or embedding credentials in local files.</p>
+            </article>
+            <article class="feature-card">
+              <div class="icon-box"><img src="./icon-tools.png" alt="" aria-hidden="true" /></div>
+              <h3>Built for real workflows</h3>
+              <p>Use Clozd intelligence in the AI tools your team already opens every day, from analysis to planning to message development.</p>
+            </article>
+            <article class="feature-card">
+              <div class="icon-box"><img src="./icon-magnify.png" alt="" aria-hidden="true" /></div>
+              <h3>Grounded answers</h3>
+              <p>Bring actual win/loss themes, decision drivers, quotes, and trend signals into your prompts so the output is more useful and credible.</p>
+            </article>
+            <article class="feature-card">
+              <div class="icon-box"><img src="./icon-computer-talking.png" alt="" aria-hidden="true" /></div>
+              <h3>Works with the AI agent you choose</h3>
+              <p>Use Clozd from Claude, Cursor, Windsurf, and other MCP-capable clients. ChatGPT is not currently supported with Clozd’s updated OAuth flow.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="intro">
+          <div class="section-head">
+            <div>
+              <span class="section-kicker">Intro to Clozd MCP</span>
+              <h2 class="section-title">Use Clozd to answer real customer questions inside the AI tools you already use.</h2>
+              <p class="section-copy">
+                Clozd MCP gives you a direct path from AI to win/loss intelligence. That means you can explore customer
+                themes, competitor patterns, decision drivers, and interview evidence without leaving your workflow or
+                translating everything into dashboard language first.
+              </p>
+            </div>
+          </div>
+
+          <div class="intro-panels">
+            <div class="wide-panel compact-panel">
+              <span class="mini-tag">What you can do</span>
+              <h3>Ask customer-facing business questions in plain language.</h3>
+              <p>
+                Instead of manually assembling reports, you can ask direct questions like which competitors are gaining
+                traction, what reasons show up most often in enterprise losses, or where pricing appears as a negative
+                driver in recent interviews.
+              </p>
+            </div>
+
+            <div class="wide-panel compact-panel">
+              <span class="mini-tag">What you gain</span>
+              <h3>More confident strategy, messaging, and sales conversations.</h3>
+              <p>
+                With Clozd connected, your AI answers can reflect real customer language and actual interview trends,
+                making them more useful for go-to-market teams, product teams, and executives.
+              </p>
+            </div>
+
+            <div class="wide-panel compact-panel">
+              <span class="mini-tag">What this looks like</span>
+              <h3>Bring customer intelligence closer to the moment you need it.</h3>
+              <p>
+                Use the MCP for competitive prep, messaging updates, trend reviews, executive summaries, interview
+                evidence pulls, and recurring sales intelligence digests.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="how-it-works">
+          <div class="section-head">
+            <div>
+              <span class="section-kicker">How it works</span>
+              <h2 class="section-title">Connect once, then start asking better questions.</h2>
+              <p class="section-copy">
+                Click through the flow to see how an MCP-capable client connects to your system, authenticates
+                securely, and turns live customer data into grounded answers inside the AI experience your team already uses.
+              </p>
+            </div>
+          </div>
+
+          <div class="workflow-grid flow-layout" style="margin-top: 22px;">
+            <div class="wide-panel flow-shell">
+              <span class="mini-tag">Interactive Flow</span>
+              <h3>Follow the connection path step by step.</h3>
+              <p>Each step shows what the user sees, what the client is doing, and what Clozd returns once the connection is live.</p>
+              <div class="flow-steps" style="margin-top: 20px;">
+                <button class="flow-step active" data-flow-step="choose">
+                  <span class="flow-step-num">1</span>
+                  <span class="flow-step-copy">
+                    <strong>Choose a client</strong>
+                    <span>Start in Claude Desktop, Cursor, Windsurf, Gemini CLI, or another MCP-capable client.</span>
+                  </span>
+                </button>
+                <button class="flow-step" data-flow-step="connect">
+                  <span class="flow-step-num">2</span>
+                  <span class="flow-step-copy">
+                    <strong>Connect Clozd</strong>
+                    <span>Add the Clozd MCP server so the client can discover tools, prompts, and resources.</span>
+                  </span>
+                </button>
+                <button class="flow-step" data-flow-step="auth">
+                  <span class="flow-step-num">3</span>
+                  <span class="flow-step-copy">
+                    <strong>Complete secure sign-in</strong>
+                    <span>OAuth opens in the browser through your organization’s identity provider.</span>
+                  </span>
+                </button>
+                <button class="flow-step" data-flow-step="ask">
+                  <span class="flow-step-num">4</span>
+                  <span class="flow-step-copy">
+                    <strong>Ask grounded questions</strong>
+                    <span>The connected agent can now work with live customer intelligence in real time.</span>
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div class="wide-panel flow-visual">
+              <div class="flow-panel active" data-flow-panel="choose">
+                <div class="flow-panel-head">
+                  <strong>Step 1: Pick the AI experience your team already uses</strong>
+                  <span>The flow starts in the client, not in another admin console. That keeps adoption simple and close to the work.</span>
+                </div>
+                <div class="flow-stage">
+                  <div class="flow-node">
+                    <span class="flow-node-label">Starting Point</span>
+                    <strong>AI agent or IDE client</strong>
+                    <p>Claude Desktop, Cursor, Windsurf, Gemini CLI, or another MCP-capable client becomes the front door for customer intelligence.</p>
+                  </div>
+                  <div class="flow-arrow">Next</div>
+                  <div class="flow-node">
+                    <span class="flow-node-label">What the user does</span>
+                    <strong>Open the client and choose to add an MCP server</strong>
+                    <p>The user stays in a familiar environment instead of switching into a separate reporting workflow.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-panel" data-flow-panel="connect">
+                <div class="flow-panel-head">
+                  <strong>Step 2: Point the client at Clozd</strong>
+                  <span>Once the Clozd MCP server is added, the client can discover structured capabilities instead of treating Clozd like an opaque database.</span>
+                </div>
+                <div class="flow-stage">
+                  <div class="flow-node">
+                    <span class="flow-node-label">Connection Layer</span>
+                    <strong>Clozd MCP Server</strong>
+                    <p>The MCP server exposes Clozd tools, prompts, and resources in a format modern AI clients can understand.</p>
+                  </div>
+                  <div class="flow-arrow">Then</div>
+                  <div class="flow-node">
+                    <span class="flow-node-label">What becomes available</span>
+                    <strong>Tools, prompts, and resources</strong>
+                    <p>The client can now discover guided actions, reusable prompts, and live context from Clozd rather than relying on generic responses.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-panel" data-flow-panel="auth">
+                <div class="flow-panel-head">
+                  <strong>Step 3: Authenticate through OAuth</strong>
+                  <span>The login happens through your identity provider, so credentials are not being copied into config files or local scripts.</span>
+                </div>
+                <div class="flow-detail-grid">
+                  <div class="flow-detail">
+                    <strong>Browser Step</strong>
+                    <span>The client opens a browser window for secure sign-in through Okta, Google, Microsoft, or another supported identity provider.</span>
+                  </div>
+                  <div class="flow-detail">
+                    <strong>Security Model</strong>
+                    <span>OAuth handles authorization without asking users to store passwords or API keys in their MCP configuration.</span>
+                  </div>
+                  <div class="flow-detail">
+                    <strong>Availability Note</strong>
+                    <span>Use Clozd with supported MCP-capable clients today. ChatGPT is not currently supported with Clozd’s updated OAuth flow.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-panel" data-flow-panel="ask">
+                <div class="flow-panel-head">
+                  <strong>Step 4: Turn live customer data into usable answers</strong>
+                  <span>After connection and sign-in, the agent can retrieve evidence-backed context from Clozd and use it directly inside your workflow.</span>
+                </div>
+                <div class="flow-stage">
+                  <div class="flow-node">
+                    <span class="flow-node-label">Inputs</span>
+                    <strong>Conversations, implementation feedback, surveys, signals, and integrations</strong>
+                    <p>Clozd data stays structured and queryable, so the agent can work with real customer evidence instead of loose summaries.</p>
+                  </div>
+                  <div class="flow-arrow">Outcome</div>
+                  <div class="flow-node">
+                    <span class="flow-node-label">Outputs</span>
+                    <strong>Quotes, patterns, summaries, and recommended next steps</strong>
+                    <p>The result is faster analysis, cleaner planning, and more credible AI output for sales, product, marketing, and leadership teams.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="prompt-library">
+          <div class="section-head">
+            <div>
+              <span class="section-kicker">Prompt Library</span>
+              <h2 class="section-title">Start with prompts that match the way your team already works.</h2>
+              <p class="section-copy">
+                Organize the prompt library by team so people can quickly find examples that feel relevant to their job,
+                not just to the underlying technology.
+              </p>
+            </div>
+            <div class="tab-row">
+              <button class="tab active" data-team-tab="sales">Sales</button>
+              <button class="tab" data-team-tab="marketing">Marketing</button>
+              <button class="tab" data-team-tab="product">Product</button>
+              <button class="tab" data-team-tab="exec">Executive</button>
+            </div>
+          </div>
+
+          <div class="prompt-grid active" data-prompt-group="sales">
+            <article class="prompt-card">
+              <span class="prompt-tag">Sales</span>
+              <h3>Competitive prep in minutes</h3>
+              <p>Summarize the top reasons we lost to our top competitor set in the last 90 days and pull two representative customer quotes I can use in prep.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Sales</span>
+              <h3>Objection pattern review</h3>
+              <p>Which objections come up most often during evaluation, and which ones correlate most strongly with losses? Include examples and suggested talk tracks.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Sales</span>
+              <h3>Demo quality readout</h3>
+              <p>Pull buyer quotes about demo quality and summarize what the best demos had in common versus the ones that failed to build confidence.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Sales</span>
+              <h3>No-decision recovery scan</h3>
+              <p>List deals marked no decision and summarize the common reasons buyers stalled, delayed, or walked away.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Sales</span>
+              <h3>Sales responsiveness audit</h3>
+              <p>Which deals cite sales responsiveness or follow-through as a positive driver, and what specifically did reps do that built confidence?</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Sales</span>
+              <h3>Lost-momentum review</h3>
+              <p>Which deals cite sales responsiveness or follow-through as a negative driver, and what specifically went wrong in the process?</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Sales</span>
+              <h3>Price ceiling moments</h3>
+              <p>Find evidence of price ceiling moments with finance or procurement involvement and summarize the thresholds buyers mention.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Sales</span>
+              <h3>Evaluation activity analysis</h3>
+              <p>Which sales activities like demos, pricing calls, or technical deep dives are mentioned most positively by buyers, and why?</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+          </div>
+
+          <div class="prompt-grid" data-prompt-group="marketing">
+            <article class="prompt-card">
+              <span class="prompt-tag">Marketing</span>
+              <h3>Messaging gap scan</h3>
+              <p>What messaging gaps are appearing most often in recent interviews, and which competitor narratives seem to benefit from them?</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Marketing</span>
+              <h3>Pricing perception breakdown</h3>
+              <p>How does pricing show up in losses? Break it into too expensive, packaging friction, budget freeze, and unclear ROI with counts and buyer quotes.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Marketing</span>
+              <h3>Positioning and buyer role analysis</h3>
+              <p>Summarize buyer comments about our positioning and brand perception, then show which personas most often act as decision makers versus influencers.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Marketing</span>
+              <h3>Packaging friction review</h3>
+              <p>Summarize buyer feedback on packaging and add-on structure and explain how it affects evaluation momentum and outcomes.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Marketing</span>
+              <h3>Industry message map</h3>
+              <p>Break down win and loss reasons by industry and list the top three differentiators that resonate in each segment.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Marketing</span>
+              <h3>Best-of-breed vs suite narrative</h3>
+              <p>Summarize why buyers choose all-in-one alternatives versus best-of-breed approaches and identify which narrative appears to win most often.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Marketing</span>
+              <h3>Outcome proof extraction</h3>
+              <p>Extract the most persuasive customer outcomes buyers cited, such as time saved, risk reduced, or revenue impact, and group them into messaging themes.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Marketing</span>
+              <h3>Trend monitor</h3>
+              <p>What customer themes have increased in frequency this quarter, and which ones should shape the next messaging update or campaign narrative?</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+          </div>
+
+          <div class="prompt-grid" data-prompt-group="product">
+            <article class="prompt-card">
+              <span class="prompt-tag">Product</span>
+              <h3>Product gap summary</h3>
+              <p>Find the most frequent product capability gaps mentioned in losses and group them into themes with representative examples.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Product</span>
+              <h3>Ease-of-use signal review</h3>
+              <p>Show where buyers describe us as easy to use or complex and summarize which workflows or features drove that perception.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Product</span>
+              <h3>Integration and API pressure test</h3>
+              <p>Which integrations are most commonly requested, which missing integrations are tied to closed-lost outcomes, and what do buyers say about the API experience?</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Product</span>
+              <h3>UI and UX impact review</h3>
+              <p>Summarize what buyers say about the user experience and whether it tends to help outcomes, slow adoption, or increase confusion.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Product</span>
+              <h3>Reporting and data access sentiment</h3>
+              <p>Pull quotes where buyers mention reporting, exports, or access to their own data and summarize the sentiment behind each theme.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Product</span>
+              <h3>Praised vs criticized features</h3>
+              <p>Which features are most often praised by buyers, and which features are most often criticized? Group them by theme and frequency.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Product</span>
+              <h3>Win-side product strengths</h3>
+              <p>What are the top product reasons we win deals, and what specific customer language best explains the value behind those wins?</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Product</span>
+              <h3>Loss-side product drivers</h3>
+              <p>What are the top product reasons we lose deals, and which themes look most urgent for roadmap or enablement attention?</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+          </div>
+
+          <div class="prompt-grid" data-prompt-group="exec">
+            <article class="prompt-card">
+              <span class="prompt-tag">Executive</span>
+              <h3>Quarterly theme brief</h3>
+              <p>Compare win drivers versus loss drivers for the last 6 months and call out the biggest gaps we should address first.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Executive</span>
+              <h3>Change-over-time review</h3>
+              <p>Summarize changes in loss themes from the last 3 months versus the prior 3 months and highlight any new themes that were not common before.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Executive</span>
+              <h3>High-value deal inspection</h3>
+              <p>Show the largest deals we won and lost in the last year, summarize the decisive factors in each outcome, and flag patterns leadership should act on.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Executive</span>
+              <h3>Segment win-rate breakdown</h3>
+              <p>Break down win rate by segment and highlight which segment shows the strongest drivers, the weakest drivers, and the clearest path to improvement.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Executive</span>
+              <h3>Decision-driver leaderboard</h3>
+              <p>Show the top ten most-cited decision drivers overall, with frequency, direction, and a representative quote for each.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Executive</span>
+              <h3>Expansion and retention scan</h3>
+              <p>Across renewals and expansions, what are the top drivers of retention, churn, and upgrades? Separate value realized, new use case, and packaging themes.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Executive</span>
+              <h3>Regional and tier performance review</h3>
+              <p>Are there specific company tiers or regions where we lose more often? Break down outcomes and summarize the main drivers behind them.</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+            <article class="prompt-card">
+              <span class="prompt-tag">Executive</span>
+              <h3>Sales cycle pressure test</h3>
+              <p>What is the average sales cycle length for wins versus losses, and which drivers appear to correlate most strongly with longer cycles?</p>
+              <div class="button-row"><button class="button copy-button" data-copy-button>Copy prompt</button></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="resources">
+          <div class="section-head">
+            <div>
+              <span class="section-kicker">Resources</span>
+              <h2 class="section-title">Go deeper when you’re ready to connect, learn, and roll out Clozd MCP internally.</h2>
+              <p class="section-copy">
+                Keep the overview experience clean, then give people the supporting materials they need for setup,
+                internal enablement, and practical testing.
+              </p>
+            </div>
+          </div>
+
+          <div class="resource-grid">
+            <article class="resource-card">
+              <div class="icon-box"><img src="./icon-direction.png" alt="" aria-hidden="true" /></div>
+              <h3>Platform demo video</h3>
+              <p>Placeholder for a polished overview video showing how the MCP connects, what the user sees, and what kinds of answers it can return.</p>
+            </article>
+            <article class="resource-card">
+              <div class="icon-box"><img src="./icon-survey.png" alt="" aria-hidden="true" /></div>
+              <h3>Setup walkthrough video</h3>
+              <p>Placeholder for a client-by-client walkthrough covering Claude Desktop, Cursor, Windsurf, and other supported MCP-capable tools.</p>
+            </article>
+            <article class="resource-card">
+              <div class="icon-box"><img src="./icon-rocketship.png" alt="" aria-hidden="true" /></div>
+              <h3>Use-case walkthrough video</h3>
+              <p>Placeholder for short demos that show real workflows for sales, product, marketing, and executive users inside the prompt library.</p>
+            </article>
+            <article class="resource-card">
+              <div class="icon-box"><img src="./icon-computer-talking.png" alt="" aria-hidden="true" /></div>
+              <h3>Admin enablement video</h3>
+              <p>Placeholder for a rollout-oriented video covering access, OAuth expectations, supported clients, and how to introduce the MCP internally.</p>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const promptTabs = [...document.querySelectorAll("[data-team-tab]")];
+      const promptGroups = [...document.querySelectorAll("[data-prompt-group]")];
+      const flowSteps = [...document.querySelectorAll("[data-flow-step]")];
+      const flowPanels = [...document.querySelectorAll("[data-flow-panel]")];
+      const copyButtons = [...document.querySelectorAll("[data-copy-button]")];
+
+      promptTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const target = tab.dataset.teamTab;
+          promptTabs.forEach((entry) => entry.classList.toggle("active", entry === tab));
+          promptGroups.forEach((group) => {
+            group.classList.toggle("active", group.dataset.promptGroup === target);
+          });
+        });
+      });
+
+      flowSteps.forEach((step) => {
+        step.addEventListener("click", () => {
+          const target = step.dataset.flowStep;
+          flowSteps.forEach((entry) => entry.classList.toggle("active", entry === step));
+          flowPanels.forEach((panel) => {
+            panel.classList.toggle("active", panel.dataset.flowPanel === target);
+          });
+        });
+      });
+
+      copyButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          const card = button.closest(".prompt-card");
+          const promptText = card?.querySelector("p")?.textContent?.trim();
+          if (!promptText) return;
+
+          try {
+            await navigator.clipboard.writeText(promptText);
+            const previous = button.textContent;
+            button.dataset.copyState = "copied";
+            button.textContent = "Copied";
+            window.setTimeout(() => {
+              button.dataset.copyState = "";
+              button.textContent = previous;
+            }, 1800);
+          } catch (error) {
+            button.textContent = "Copy failed";
+            window.setTimeout(() => {
+              button.dataset.copyState = "";
+              button.textContent = "Copy prompt";
+            }, 1800);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
