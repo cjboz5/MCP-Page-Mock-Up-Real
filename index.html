@@ -276,7 +276,6 @@
         color: rgba(15, 23, 37, 0.74);
       }
 
-      .pill-row,
       .button-row,
       .tab-row,
       .mini-stack {
@@ -285,7 +284,6 @@
         gap: 10px;
       }
 
-      .mini-pill,
       .mini-tag {
         display: inline-flex;
         align-items: center;
@@ -301,12 +299,6 @@
       .mini-tag {
         background: rgba(39, 79, 219, 0.08);
         color: var(--royal);
-      }
-
-      .mini-pill {
-        background: rgba(255, 255, 255, 0.24);
-        border: 1px solid rgba(255, 255, 255, 0.28);
-        color: rgba(15, 23, 37, 0.78);
       }
 
       .hero-side {
@@ -407,23 +399,6 @@
         margin: 8px 0 0;
         color: var(--muted);
         line-height: 1.6;
-      }
-
-      .chip-row {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 16px;
-      }
-
-      .chip {
-        padding: 8px 12px;
-        border-radius: 14px;
-        background: rgba(9, 212, 200, 0.12);
-        color: #0c7570;
-        font-size: 13px;
-        font-weight: 700;
       }
 
       .hero-note {
@@ -662,15 +637,7 @@
       }
 
       .prompt-tag {
-        display: inline-flex;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(9, 212, 200, 0.12);
-        color: #0c7a73;
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
+        display: none;
       }
 
       .workflow-grid {
@@ -737,9 +704,65 @@
         line-height: 1.6;
       }
 
+      .flow-highlight {
+        padding: 20px 22px;
+        border-radius: 24px;
+        border: 1px solid rgba(39, 79, 219, 0.12);
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 14px 32px rgba(20, 166, 248, 0.08);
+      }
+
+      .flow-highlight-label {
+        display: block;
+        margin-bottom: 10px;
+        color: #0ca9a4;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .flow-highlight p {
+        margin: 10px 0 0;
+        color: #55616b;
+        line-height: 1.75;
+      }
+
+      .flow-snapshot-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+
+      .flow-snapshot-card {
+        padding: 16px 18px;
+        border-radius: 20px;
+        border: 1px solid rgba(39, 79, 219, 0.1);
+        background: rgba(20, 166, 248, 0.05);
+      }
+
+      .flow-snapshot-card strong {
+        display: block;
+        color: var(--charcoal);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .flow-snapshot-card span {
+        display: block;
+        margin-top: 8px;
+        color: #55616b;
+        line-height: 1.7;
+      }
+
       .flow-visual {
         padding: 28px;
         min-height: 100%;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(241, 248, 255, 0.9)),
+          radial-gradient(circle at top right, rgba(20, 166, 248, 0.12), transparent 34%);
       }
 
       .flow-panel {
@@ -879,6 +902,24 @@
         display: grid;
       }
 
+      .prompt-group-title {
+        grid-column: 1 / -1;
+        margin: 0;
+        color: var(--charcoal);
+        font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+        line-height: 1.06;
+        letter-spacing: -0.03em;
+      }
+
+      .prompt-group-intro {
+        grid-column: 1 / -1;
+        margin: -6px 0 4px;
+        max-width: 760px;
+        color: #5b6770;
+        font-size: 16px;
+        line-height: 1.75;
+      }
+
       .desktop-only {
         display: none;
       }
@@ -965,11 +1006,6 @@
                 Connect Clozd to the AI tools your team already uses so you can explore win/loss themes, surface
                 decision drivers, and bring real customer evidence into strategy, selling, and messaging work.
               </p>
-              <div class="pill-row" style="margin-top: 24px;">
-                <span class="mini-pill">Secure OAuth connection</span>
-                <span class="mini-pill">Real-time Clozd insights</span>
-                <span class="mini-pill">Works with MCP-capable agents</span>
-              </div>
               <div class="button-row" style="margin-top: 28px;">
                 <a class="button primary" href="#how-it-works">Get started</a>
                 <a class="button" href="#prompt-library">Explore prompts</a>
@@ -993,11 +1029,6 @@
                   <img class="diagram-logo" src="./clozd-logo-mark.svg" alt="Clozd logo mark" />
                   <h2>Clozd MCP Server</h2>
                   <p>Secure • Scalable • Grounded in your actual customer insights</p>
-                  <div class="chip-row">
-                    <span class="chip">Tools</span>
-                    <span class="chip">Prompts</span>
-                    <span class="chip">Resources</span>
-                  </div>
                 </div>
 
                 <div class="diagram-col">
@@ -1115,9 +1146,8 @@
 
           <div class="workflow-grid flow-layout" style="margin-top: 22px;">
             <div class="wide-panel flow-shell">
-              <span class="mini-tag">Interactive Flow</span>
               <h3>Follow the connection path step by step.</h3>
-              <p>Each step shows what the user sees, what the client is doing, and what Clozd returns once the connection is live.</p>
+              <p>Select a step to see what the user does, what Clozd is handling behind the scenes, and what becomes available next.</p>
               <div class="flow-steps" style="margin-top: 20px;">
                 <button class="flow-step active" data-flow-step="choose">
                   <span class="flow-step-num">1</span>
@@ -1154,19 +1184,25 @@
               <div class="flow-panel active" data-flow-panel="choose">
                 <div class="flow-panel-head">
                   <strong>Step 1: Pick the AI experience your team already uses</strong>
-                  <span>The flow starts in the client, not in another admin console. That keeps adoption simple and close to the work.</span>
+                  <span>The flow begins where your team already works, which makes adoption feel practical instead of like a side project.</span>
                 </div>
-                <div class="flow-stage">
-                  <div class="flow-node">
-                    <span class="flow-node-label">Starting Point</span>
-                    <strong>AI agent or IDE client</strong>
-                    <p>Claude Desktop, Cursor, Windsurf, Gemini CLI, or another MCP-capable client becomes the front door for customer intelligence.</p>
+                <div class="flow-highlight">
+                  <span class="flow-highlight-label">What happens here</span>
+                  <strong>Your AI client becomes the front door to customer intelligence.</strong>
+                  <p>Start in Claude Desktop, Cursor, Windsurf, Gemini CLI, or another MCP-capable client and choose to add Clozd as a server.</p>
+                </div>
+                <div class="flow-snapshot-grid">
+                  <div class="flow-snapshot-card">
+                    <strong>User action</strong>
+                    <span>Open the client you already use and begin the add-server flow.</span>
                   </div>
-                  <div class="flow-arrow">Next</div>
-                  <div class="flow-node">
-                    <span class="flow-node-label">What the user does</span>
-                    <strong>Open the client and choose to add an MCP server</strong>
-                    <p>The user stays in a familiar environment instead of switching into a separate reporting workflow.</p>
+                  <div class="flow-snapshot-card">
+                    <strong>Why it matters</strong>
+                    <span>No one has to leave their normal workspace just to get access to customer insight.</span>
+                  </div>
+                  <div class="flow-snapshot-card">
+                    <strong>What comes next</strong>
+                    <span>Once Clozd is added, the client can discover the capabilities it exposes.</span>
                   </div>
                 </div>
               </div>
@@ -1174,19 +1210,25 @@
               <div class="flow-panel" data-flow-panel="connect">
                 <div class="flow-panel-head">
                   <strong>Step 2: Point the client at Clozd</strong>
-                  <span>Once the Clozd MCP server is added, the client can discover structured capabilities instead of treating Clozd like an opaque database.</span>
+                  <span>Adding the server gives the client a clear way to understand what Clozd can provide and when to use it.</span>
                 </div>
-                <div class="flow-stage">
-                  <div class="flow-node">
-                    <span class="flow-node-label">Connection Layer</span>
-                    <strong>Clozd MCP Server</strong>
-                    <p>The MCP server exposes Clozd tools, prompts, and resources in a format modern AI clients can understand.</p>
+                <div class="flow-highlight">
+                  <span class="flow-highlight-label">What happens here</span>
+                  <strong>The client can now see Clozd as structured capabilities, not just raw data.</strong>
+                  <p>The MCP server exposes tools, prompts, and resources in a format modern AI clients can use directly inside the conversation.</p>
+                </div>
+                <div class="flow-snapshot-grid">
+                  <div class="flow-snapshot-card">
+                    <strong>User action</strong>
+                    <span>Add the Clozd MCP server in the client configuration flow.</span>
                   </div>
-                  <div class="flow-arrow">Then</div>
-                  <div class="flow-node">
-                    <span class="flow-node-label">What becomes available</span>
-                    <strong>Tools, prompts, and resources</strong>
-                    <p>The client can now discover guided actions, reusable prompts, and live context from Clozd rather than relying on generic responses.</p>
+                  <div class="flow-snapshot-card">
+                    <strong>What Clozd provides</strong>
+                    <span>Prompts, tools, and live context that help the agent answer with real evidence.</span>
+                  </div>
+                  <div class="flow-snapshot-card">
+                    <strong>What changes</strong>
+                    <span>The client can guide the user toward grounded actions instead of generic responses.</span>
                   </div>
                 </div>
               </div>
@@ -1194,20 +1236,25 @@
               <div class="flow-panel" data-flow-panel="auth">
                 <div class="flow-panel-head">
                   <strong>Step 3: Authenticate through OAuth</strong>
-                  <span>The login happens through your identity provider, so credentials are not being copied into config files or local scripts.</span>
+                  <span>Authentication happens through your identity provider, so access feels familiar and stays aligned with how your organization already manages sign-in.</span>
                 </div>
-                <div class="flow-detail-grid">
-                  <div class="flow-detail">
-                    <strong>Browser Step</strong>
-                    <span>The client opens a browser window for secure sign-in through Okta, Google, Microsoft, or another supported identity provider.</span>
+                <div class="flow-highlight">
+                  <span class="flow-highlight-label">What happens here</span>
+                  <strong>The client opens a secure browser-based sign-in flow.</strong>
+                  <p>OAuth handles the authorization step without asking users to paste credentials into local config files or pass around API keys.</p>
+                </div>
+                <div class="flow-snapshot-grid">
+                  <div class="flow-snapshot-card">
+                    <strong>User action</strong>
+                    <span>Sign in through Okta, Google, Microsoft, or another supported provider.</span>
                   </div>
-                  <div class="flow-detail">
-                    <strong>Security Model</strong>
-                    <span>OAuth handles authorization without asking users to store passwords or API keys in their MCP configuration.</span>
+                  <div class="flow-snapshot-card">
+                    <strong>Security benefit</strong>
+                    <span>Access is granted through a familiar identity flow instead of manual credential handling.</span>
                   </div>
-                  <div class="flow-detail">
-                    <strong>Availability Note</strong>
-                    <span>Use Clozd with supported MCP-capable clients today. ChatGPT is not currently supported with Clozd’s updated OAuth flow.</span>
+                  <div class="flow-snapshot-card">
+                    <strong>Result</strong>
+                    <span>The connection is ready for live customer-aware work inside the client.</span>
                   </div>
                 </div>
               </div>
@@ -1215,19 +1262,25 @@
               <div class="flow-panel" data-flow-panel="ask">
                 <div class="flow-panel-head">
                   <strong>Step 4: Turn live customer data into usable answers</strong>
-                  <span>After connection and sign-in, the agent can retrieve evidence-backed context from Clozd and use it directly inside your workflow.</span>
+                  <span>Once connected, the agent can pull in live customer evidence and use it directly in the work your team is already doing.</span>
                 </div>
-                <div class="flow-stage">
-                  <div class="flow-node">
-                    <span class="flow-node-label">Inputs</span>
-                    <strong>Conversations, implementation feedback, surveys, signals, and integrations</strong>
-                    <p>Clozd data stays structured and queryable, so the agent can work with real customer evidence instead of loose summaries.</p>
+                <div class="flow-highlight">
+                  <span class="flow-highlight-label">What happens here</span>
+                  <strong>You can ask natural questions and get answers grounded in real customer input.</strong>
+                  <p>Clozd gives the agent access to conversations, implementation feedback, surveys, signals, and integrations so output is anchored in real evidence.</p>
+                </div>
+                <div class="flow-snapshot-grid">
+                  <div class="flow-snapshot-card">
+                    <strong>Input</strong>
+                    <span>Customer interviews, trend signals, decision drivers, quotes, and competitive context.</span>
                   </div>
-                  <div class="flow-arrow">Outcome</div>
-                  <div class="flow-node">
-                    <span class="flow-node-label">Outputs</span>
-                    <strong>Quotes, patterns, summaries, and recommended next steps</strong>
-                    <p>The result is faster analysis, cleaner planning, and more credible AI output for sales, product, marketing, and leadership teams.</p>
+                  <div class="flow-snapshot-card">
+                    <strong>Output</strong>
+                    <span>Summaries, patterns, evidence pulls, and sharper next-step recommendations.</span>
+                  </div>
+                  <div class="flow-snapshot-card">
+                    <strong>Business value</strong>
+                    <span>Faster prep, stronger messaging, and more credible decisions across the team.</span>
                   </div>
                 </div>
               </div>
@@ -1254,6 +1307,8 @@
           </div>
 
           <div class="prompt-grid active" data-prompt-group="sales">
+            <h3 class="prompt-group-title">Sales Prompts</h3>
+            <p class="prompt-group-intro">Use these to prepare for deals, spot recurring objections, and pull customer evidence into the moments that matter most.</p>
             <article class="prompt-card">
               <span class="prompt-tag">Sales</span>
               <h3>Competitive prep in minutes</h3>
@@ -1305,6 +1360,8 @@
           </div>
 
           <div class="prompt-grid" data-prompt-group="marketing">
+            <h3 class="prompt-group-title">Marketing Prompts</h3>
+            <p class="prompt-group-intro">Use these to sharpen positioning, understand buyer perception, and find language worth turning into stronger messaging.</p>
             <article class="prompt-card">
               <span class="prompt-tag">Marketing</span>
               <h3>Messaging gap scan</h3>
@@ -1356,6 +1413,8 @@
           </div>
 
           <div class="prompt-grid" data-prompt-group="product">
+            <h3 class="prompt-group-title">Product Prompts</h3>
+            <p class="prompt-group-intro">Use these to surface product gaps, validate roadmap priorities, and understand how buyers describe the experience today.</p>
             <article class="prompt-card">
               <span class="prompt-tag">Product</span>
               <h3>Product gap summary</h3>
@@ -1407,6 +1466,8 @@
           </div>
 
           <div class="prompt-grid" data-prompt-group="exec">
+            <h3 class="prompt-group-title">Executive Prompts</h3>
+            <p class="prompt-group-intro">Use these to spot higher-level patterns, compare shifts over time, and focus leadership attention on the themes with the biggest impact.</p>
             <article class="prompt-card">
               <span class="prompt-tag">Executive</span>
               <h3>Quarterly theme brief</h3>
@@ -1462,10 +1523,10 @@
           <div class="section-head">
             <div>
               <span class="section-kicker">Resources</span>
-              <h2 class="section-title">Go deeper when you’re ready to connect, learn, and roll out Clozd MCP internally.</h2>
+              <h2 class="section-title">Helpful resources for getting more value out of Clozd MCP.</h2>
               <p class="section-copy">
-                Keep the overview experience clean, then give people the supporting materials they need for setup,
-                internal enablement, and practical testing.
+                Whether you are getting set up for the first time or looking for new ways to use Clozd in daily work,
+                these resources can help you connect faster, ask better questions, and see stronger results.
               </p>
             </div>
           </div>
